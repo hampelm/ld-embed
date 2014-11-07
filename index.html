@@ -12,26 +12,38 @@
     background: #0062be;
   }
 
+  #header {
+  }
+
   h1 {
-    margin: 20px;
+    padding: 20px;
   }
 
   iframe {
     border: 0;
-    height: 50%;
-    min-height: 400px;
   }
   </style>
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script type="text/javascript">
     $(function() {
-      console.log("REady");
+      var resize = function() {
+        var headerHeight = $('#header').height();
+        var viewportHeight = $(window).height();
+        var newHeight = viewportHeight - headerHeight;
+        $('iframe').height(newHeight);
+      };
+
+      $( window ).resize(resize);
+      resize();
     })
   </script>
 </head>
 <body>
-<h1>
-<img src="img/walkscope.png">
+<div id="header">
+  <h1>
+    <img src="img/walkscope.png" height="75" alt="">
+  </h1>
+</div>
 <iframe src="https://ptx-dev.herokuapp.com/#embed/surveys/dev-survey-004" width="100%"></iframe>
 </body>
 </html>
