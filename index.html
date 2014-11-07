@@ -3,9 +3,17 @@
 <head>
   <title></title>
   <style type="text/css">
-  body {
+  * {
     margin: 0;
     padding: 0;
+  }
+
+  body {
+    background: #0062be;
+  }
+
+  h1 {
+    margin: 20px;
   }
 
   iframe {
@@ -14,9 +22,16 @@
     min-height: 400px;
   }
   </style>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      console.log("REady");
+    })
+  </script>
 </head>
 <body>
-
+<h1>
+<img src="img/walkscope.png">
 <iframe src="https://ptx-dev.herokuapp.com/#embed/surveys/dev-survey-004" width="100%"></iframe>
 </body>
 </html>
