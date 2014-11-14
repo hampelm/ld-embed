@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style type="text/css">
+  * {
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica Neue, Helvetica, sans-serif;
+  }
+
+  body {
+    background: #fcf5f0;
+    color: #6e6663;
+  }
+
+  #header {
+    background: #b7aba5;
+    overflow: auto;
+    position: relative;
+  }
+
+  h1 {
+    display: inline-block;
+    padding: 5px 3%;
+    float: left;
+  }
+
+  h2 {
+    padding: 30px 4%;
+    font-weight: normal;
+    font-size: 60px;
+  }
+
+  iframe {
+    border: 0;
+  }
+
+  #nav {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+    overflow: auto;
+  }
+
+  #nav li {
+    display: inline-block;
+    background: #ffad00;
+    padding: 0;
+    margin: 0;
+    float: left;
+  }
+
+  #nav li a {
+    display: inline-block;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 15px 20px;
+  }
+
+  #nav li.selected a {
+    background: #fff;
+    color: #ffad00;
+  }
+
+  </style>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      var resize = function() {
+        var headerHeight = $('#header').height();
+        var viewportHeight = $(window).height();
+        var newHeight = viewportHeight - headerHeight;
+        $('iframe').height(newHeight);
+      };
+
+      $( window ).resize(resize);
+      resize();
+
+      $('#nav li a').click(function(event) {
+        // TODO
+        // In the future, we might just want to hide/show several iframes
+        // That way the content also gets preloaded.
+        event.preventDefault();
+        console.log("Class name", this);
+        if (this.className === 'overview') {
+          $('iframe').prop('src', 'https://ptx-dev.herokuapp.com/#embed/surveys/dev-survey-004');
+        } else {
+          $('iframe').prop('src', 'https://ptx-dev.herokuapp.com/mobile/#dev-survey-004');
+        }
+
+        $('#nav li').removeClass('selected');
+        $(this).parent().addClass('selected');
+      });
+    })
+  </script>
+</head>
+<body>
+<div id="header">
+  <h1>
+    <img src="img/walkscope.png" height="75" alt="">
+  </h1>
+  <ul id="nav">
+    <li class="selected"><a href="#" class="overview">Overview</a></li>
+    <li><a href="#" class="mobile">Collect</a></li>
+  </ul>
+</div>
+
+<h2>Walkscope Survey</h2>
+<iframe src="https://ptx-dev.herokuapp.com/#embed/surveys/dev-survey-004" width="100%"></iframe>
+</body>
+</html>
