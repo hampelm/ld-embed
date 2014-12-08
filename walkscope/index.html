@@ -1,92 +1,31 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>Walkscope : LocalData</title>
   <style type="text/css">
-  @font-face {
-    font-family: "NeuzeitOfficeW01-Regula";
-    src: url("http://localdata-static.s3-website-us-east-1.amazonaws.com/fonts/neuzeit/regular/regular.eot?#iefix");
-    src: url("http://localdata-static.s3-website-us-east-1.amazonaws.com/fonts/neuzeit/regular/regular.eot?#iefix") format("eot"), url("http://localdata-static.s3-website-us-east-1.amazonaws.com/fonts/neuzeit/regular/regular.woff") format("woff"), url("http://localdata-static.s3-website-us-east-1.amazonaws.com/fonts/neuzeit/regular/regular.ttf") format("truetype"), url("http://localdata-static.s3-website-us-east-1.amazonaws.com/fonts/neuzeit/regular/regular.svg#85050462-ab1f-4478-a289-36eed1d3c53f") format("svg"); }
-  @font-face {
-    font-family: "Neuzeit Office W01 Bold";
-    src: url("http://localdata-static.s3-website-us-east-1.amazonaws.com/fonts/neuzeit/bold/bold.eot?#iefix");
-    src: url("http://localdata-static.s3-website-us-east-1.amazonaws.com/fonts/neuzeit/bold/bold.eot?#iefix") format("eot"), url("http://localdata-static.s3-website-us-east-1.amazonaws.com/fonts/neuzeit/bold.woff") format("woff"), url("http://localdata-static.s3-website-us-east-1.amazonaws.com/fonts/neuzeit/bold/bold.ttf") format("truetype"), url("http://localdata-static.s3-website-us-east-1.amazonaws.com/fonts/neuzeit/bold/bold.svg#d4cb246e-742d-4269-9f6a-901a050ff03f") format("svg"); }
-
-  * {
-    margin: 0;
-    padding: 0;
-    font-family: NeuzeitOfficeW01-Regula, Helvetica Neue, sans-serif;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  body {
-    background: #fcf5f0;
-    color: #6e6663;
-  }
-
-  #header {
-    background: #b7aba5;
-    overflow: auto;
-    position: relative;
-  }
-
-  h1 {
-    display: inline-block;
-    padding: 5px 3%;
-    float: left;
-  }
-
-  h2 {
-    padding: 20px 4%;
-    font-weight: normal;
-    font-size: 60px;
-  }
-
-  iframe {
-    border: 0;
-  }
-
-  #nav {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    padding: 0;
-    margin: 0;
-    overflow: auto;
-  }
-
-  #nav li {
-    display: inline-block;
-    background: #ffad00;
-    padding: 0;
-    margin: 0;
-    float: left;
-  }
-
-  #nav li a {
-    display: inline-block;
-    color: #fff;
-    font-weight: bold;
-    text-decoration: none;
-    padding: 15px 20px;
-  }
-
-  #nav li.selected a {
-    background: #fff;
-    color: #ffad00;
-  }
-
+    @import url('../css/styles.css');
   </style>
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="//cdn.jsdelivr.net/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/underscorejs/1.7.0/underscore-min.js"></script>
   <script type="text/javascript">
     $(function() {
+      var $content = $('#content');
       var resize = function() {
         var headerHeight = $('#header').height();
         var viewportHeight = $(window).height();
         var newHeight = viewportHeight - headerHeight;
         $('iframe').height(newHeight);
+        $content.height(newHeight);
       };
 
+      var aboutTemplate = _.template($('#t-about').html());
+      var embedTemplate = _.template($('#t-embed').html());
+
+      var $embed = $(embedTemplate());
+      var $about = $(aboutTemplate());
+      $content.empty();
+      $content.append($embed);
       $( window ).resize(resize);
       resize();
 
@@ -95,12 +34,40 @@
         // In the future, we might just want to hide/show several iframes
         // That way the content also gets preloaded.
         event.preventDefault();
-        console.log("Class name", this);
-        if (this.className === 'overview') {
-          $('iframe').prop('src', 'https://ptx-dev.herokuapp.com/#embed/surveys/dev-survey-004');
-        } else {
-          $('iframe').prop('src', 'https://ptx-dev.herokuapp.com/mobile/#dev-survey-004');
+
+        var $iframe = $('#iframe');
+
+        $content.removeClass('full');
+
+        switch (this.className) {
+          case "overview":
+            $embed.detach();
+            $content.empty();
+            $content.append($embed);
+            $iframe.attr('src', 'https://ptx-dev.herokuapp.com/#multi/surveys/walkscope');
+            resize();
+            break;
+
+          case "details":
+            $embed.detach();
+            $content.empty();
+            $content.addClass('full');
+            $content.append($embed);
+            $iframe.attr('src', 'https://ptx-dev.herokuapp.com/#embed/surveys/walkscope');
+            resize();
+            break;
+
+          case "collect":
+            window.location = 'http://ptx-dev.herokuapp.com/mobile/#walkscope';
+            break;
+
+          case "about":
+            $content.empty();
+            $content.append($about);
+            resize();
+            break;
         }
+
 
         $('#nav li').removeClass('selected');
         $(this).parent().addClass('selected');
@@ -109,17 +76,43 @@
   </script>
 </head>
 <body>
-<div id="header">
-  <h1>
-    <img src="img/walkscope.png" height="75" alt="">
-  </h1>
-  <ul id="nav">
-    <li class="selected"><a href="#" class="overview">Overview</a></li>
-    <li><a href="#" class="mobile">Collect</a></li>
-  </ul>
-</div>
+  <div id="header">
+    <h1>
+      <img src="img/walkscope.png" height="75" alt="">
+    </h1>
+    <ul id="nav">
+      <li class="selected"><a href="#" class="overview">Overview</a></li>
+      <li><a href="#details" class="details">Details</a></li>
+      <li><a href="#collect" class="collect">Add Data</a></li>
+      <li><a href="#" class="about">About</a></li>
+    </ul>
+  </div>
 
-<h2>Walkscope Survey</h2>
-<iframe src="https://ptx-dev.herokuapp.com/#embed/surveys/dev-survey-004" width="100%"></iframe>
+  <div class="content" id="content">
+  </div>
+
+  <script type="text/template" id="t-embed">
+    <h2>Walkscope Survey</h2>
+    <iframe src="https://ptx-dev.herokuapp.com/#multi/surveys/walkscope" width="100%" id="iframe"></iframe>
+  </script>
+  <script type="text/template" id="t-about">
+    <div id="about">
+      <h3>What is this project about?</h3>
+      <p>At WalkDenver we believe that "people are pedestrians by design." Yet
+      street design is often focused solely on cars, resulting in streets that
+      are unsafe and unpleasant for people on foot.</p>
+
+      <p>WALKscope allows Denver residents and visitors to collect data related
+      to sidewalks, intersections, and pedestrian counts. This information will
+      help create an inventory of pedestrian infrastructure in Denver, identify
+      gaps, and build the case for improvements. WalkDenver and PlaceMatters
+      collaborated to develop WALKscope with grant funding from
+      <a href="http://www.milehighconnects.org/">Mile High Connects.</a></p>
+      <p>
+        <img src="img/walkscope-alt.png" height="60" alt="WALKscope">
+        <img src="img/placematters.png" height="60" alt="PlaceMatters">
+      </p>
+    </div>
+  </script>
 </body>
 </html>
