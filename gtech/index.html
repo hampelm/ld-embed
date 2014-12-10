@@ -9,9 +9,10 @@
   <script type="text/javascript">
     $(function() {
       var resize = function() {
-        var headerHeight = $('#header').height();
+        var bodyHeight = $('body').outerHeight();
+        var iframeHeight = $('iframe').outerHeight();
         var viewportHeight = $(window).height();
-        var newHeight = viewportHeight - headerHeight;
+        var newHeight = viewportHeight - bodyHeight + iframeHeight;
         $('iframe').height(newHeight);
       };
 
@@ -28,14 +29,14 @@
         switch (this.className) {
           case "overview":
             console.log("overview");
-            $('iframe').prop('src', 'https://ptx-dev.herokuapp.com/#multi/surveys/pcrg-building-condition');
+            $('iframe').prop('src', 'https://ptx-dev.herokuapp.com/#project/gtech');
             $('iframe').show();
             $('.content').hide();
             break;
 
           case "details":
             console.log("det");
-            $('iframe').prop('src', 'https://ptx-dev.herokuapp.com/#embed/surveys/pcrg-building-condition');
+            $('iframe').prop('src', 'https://ptx-dev.herokuapp.com/#project/gtech/dive');
             $('iframe').show();
             $('.content').hide();
             break;
@@ -75,6 +76,6 @@
     cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
     proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </div>
-  <iframe src="https://ptx-dev.herokuapp.com/#multi/surveys/pcrg-building-condition" width="100%" id="iframe"></iframe>
+  <iframe src="https://ptx-dev.herokuapp.com/#multi/surveys/pcrg-building-condition" width="100%" id="iframe" scrolling="no" frameborder="0"></iframe>
 </body>
 </html>
