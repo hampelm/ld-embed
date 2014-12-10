@@ -29,16 +29,23 @@
         switch (this.className) {
           case "overview":
             console.log("overview");
-            $('iframe').prop('src', 'https://ptx-dev.herokuapp.com/#project/gtech');
+            $('iframe').attr('src', '');
+            $('iframe').attr('src', 'https://ptx-dev.herokuapp.com/#projects/gtech');
             $('iframe').show();
             $('.content').hide();
             break;
 
           case "details":
             console.log("det");
-            $('iframe').prop('src', 'https://ptx-dev.herokuapp.com/#project/gtech/dive');
+            $('iframe').attr('src', '');
+            $('iframe').attr('src', 'https://ptx-dev.herokuapp.com/#projects/gtech/dive');
             $('iframe').show();
             $('.content').hide();
+            resize();
+            break;
+
+          case "collect":
+            window.location = 'http://app.localdata.com/mobile/#lots-to-love';
             break;
 
           case "about":
@@ -62,11 +69,12 @@
     <ul id="nav">
       <li class="selected"><a href="#" class="overview">Overview</a></li>
       <li><a href="#details" class="details">Details</a></li>
+      <li><a href="#collect" class="collect">Submit Project</a></li>
       <li><a href="#" class="about">About</a></li>
     </ul>
   </div>
 
-  <h2>PCRG Building and Vacant Land Survey</h2>
+  <h2>Lots to Love</h2>
 
   <div class="content">
     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
